@@ -686,6 +686,24 @@ You can find the project at: https://github.com/domoritz/leaflet-locatecontrol
         },
 
         /**
+         * Get the orientation of the screen
+         */
+        _getScreenOrientation: function() {
+            const oriented = screen && (screen.orientation || screen.mozOrientation);
+            if (oriented) switch (oriented.type || oriented) {
+              case 'landscape-primary':
+                return 90;
+              case 'landscape-secondary':
+                return -90;
+              case 'portrait-secondary':
+                return 180;
+              case 'portrait-primary':
+                return 0;
+            }
+            return window.orientation|0; // defaults to zero if orientation is unsupported
+        },
+
+        /**
          * Process and normalise compass events
          */
         _onDeviceOrientation: function(e) {
@@ -695,10 +713,10 @@ You can find the project at: https://github.com/domoritz/leaflet-locatecontrol
 
             if (e.webkitCompassHeading) {
                 // iOS
-                this._setCompassHeading(e.webkitCompassHeading + window.orientation);
+                this._setCompassHeading(e.webkitCompassHeading + this._getScreenOrientation());
             } else if (e.absolute && e.alpha) {
                 // Android
-                this._setCompassHeading(360 - e.alpha)
+                this._setCompassHeading(360 - e.alpha + this._getScreenOrientation())
             }
         },
 
