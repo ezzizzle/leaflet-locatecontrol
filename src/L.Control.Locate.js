@@ -695,7 +695,7 @@ You can find the project at: https://github.com/domoritz/leaflet-locatecontrol
 
             if (e.webkitCompassHeading) {
                 // iOS
-                this._setCompassHeading(e.webkitCompassHeading);
+                this._setCompassHeading(e.webkitCompassHeading + window.orientation);
             } else if (e.absolute && e.alpha) {
                 // Android
                 this._setCompassHeading(360 - e.alpha)
